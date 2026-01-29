@@ -1,0 +1,67 @@
+# 인덱스 기본 정보
+index_pattern: "nhn-monitoring_api-realtime-*"
+description: "클라우드 인프라 및 API 모니터링 메트릭 데이터입니다."
+
+# 필드 정의: 각 필드의 경로와 설명을 리스트 형태로 관리
+fields:
+  - name: "@timestamp"
+    type: "date"
+    description: "로그 수집 시간. 로그 수집 시간 기반 조회(range 쿼리) 시 필수 사용."
+
+  - name: "data_timestamp"
+    type: "date"
+    description: "로그 생성 시간. 로그 생성 시간 기반 조회(range 쿼리) 시 필수 사용."
+
+  - name: "data_name"
+    type: "keyword"
+    description: 
+      메트릭의 이름. 
+      '메모리 용량'이나 '메모리 사용량' 질문에는 'memory_total'을 사용하고, 
+      'CPU' 질문에는 'cpu_usage'를 사용하세요.
+
+  - name: "data_value"
+    type: "double"
+    description: "실제 측정된 수치 데이터."
+
+  - name: "data_unit"
+    type: "keyword"
+    description: "데이터의 단위 (예: %, Byte, Count 등)."
+
+  - name: "data_type"
+    type: "keyword"
+    description: "데이터의 종류."
+
+  - name: "vm_name"
+    type: "keyword"
+    description: "가상 머신(VM)의 이름."
+
+  - name: "vm_id"
+    type: "keyword"
+    description: "가상 머신(VM)의 고유 식별자."
+
+  - name: "instance_ip"
+    type: "ip"
+    description: "인스턴스의 IP 주소."
+
+  - name: "cloud_type"
+    type: "keyword"
+    description: "클라우드 서비스 종류 (예: AWS, Azure, GCP 등)."
+
+  - name: "project_id"
+    type: "keyword"
+    description: "해당 자원이 속한 프로젝트 ID."
+
+  - name: "cluster_id"
+    type: "keyword"
+    description: "쿠버네티스나 클러스터 환경의 ID."
+    
+  - name: "workload_type"
+    type: "keyword"
+    description: "워크로드 유형."
+
+
+# 쿼리 생성 가이드: LLM이 지켜야 할 특별 규칙들
+query_rules:
+  - "필드명 입력시 .keyword를 붙이지 마세요."
+  - "사용자의 한글 질문에서 메트릭 단어를 추출하여 영문 매핑값(memory_total 등)으로 치환하세요."
+  - "'어제'나 '오늘' 같은 시간 질문은 data_timestamp 필드를 사용하여 range 쿼리를 생성하세요."
